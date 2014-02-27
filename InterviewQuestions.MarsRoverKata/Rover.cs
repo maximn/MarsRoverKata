@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace InterviewQuestions.MarsRoverKata
 {
-    public class Rover
+    public class Rover : IRover
     {
         public Position Position { get; set; }
         public Direction Direction { get; set; }
