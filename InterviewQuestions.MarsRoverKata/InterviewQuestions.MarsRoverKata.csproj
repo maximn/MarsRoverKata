@@ -43,6 +43,7 @@
     <Compile Include="IPlanet.cs" />
     <Compile Include="IRover.cs" />
     <Compile Include="Mars.cs" />
+    <Compile Include="ObstacleOnWayException.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rover.cs" />

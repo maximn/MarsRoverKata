@@ -14,6 +14,11 @@ namespace InterviewQuestions.MarsRoverKata
             Height = height;
         }
 
+        public bool IsClear(Position position)
+        {
+            return true; // Mars is all clear
+        }
+
         public Position CalculateOutOfBoundaryPosition(Position position)
         {
             int x = WrapAroundInteger(position.X, Width);

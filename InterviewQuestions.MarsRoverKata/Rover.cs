@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -47,7 +48,9 @@ namespace InterviewQuestions.MarsRoverKata
                     throw new ArgumentOutOfRangeException("Invalid value set for Direction enum");
             }
 
-            this.Position = planet.CalculateOutOfBoundaryPosition(new Position(x, y));
+            Position nextPosition = planet.CalculateOutOfBoundaryPosition(new Position(x, y));
+            ThrowIfPositionNotClear(nextPosition);
+            this.Position = nextPosition;
         }
 
         public void MoveBackward()
@@ -74,7 +77,17 @@ namespace InterviewQuestions.MarsRoverKata
                     throw new ArgumentOutOfRangeException("Invalid value set for Direction enum");
             }
 
-            this.Position = planet.CalculateOutOfBoundaryPosition(new Position(x, y));
+            Position nextPosition = planet.CalculateOutOfBoundaryPosition(new Position(x, y));
+            ThrowIfPositionNotClear(nextPosition);
+            this.Position = nextPosition;
+        }
+
+        private void ThrowIfPositionNotClear(Position position)
+        {
+            if (!planet.IsClear(position))
+            {
+                throw new ObstacleOnWayException(string.Format("Can't move to (%0, %1) due to an obstacle on the planet", position.X, position.Y));
+            }
         }
 
         public void TurnRight()

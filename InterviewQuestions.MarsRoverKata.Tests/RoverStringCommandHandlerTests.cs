@@ -62,7 +62,7 @@ namespace InterviewQuestions.MarsRoverKata.Tests
         public void CombinationOfCommands_MoveAccordingly()
         {
             //Use a stringbuilder to verify MoveForward()/MoveBackward was called in the correct order.
-            StringBuilder sb = new  StringBuilder();
+            StringBuilder sb = new StringBuilder();
 
             roverMock.Setup(r => r.MoveForward()).Callback(() => sb.Append("F"));
             roverMock.Setup(r => r.MoveBackward()).Callback(() => sb.Append("B"));
@@ -76,9 +76,34 @@ namespace InterviewQuestions.MarsRoverKata.Tests
         }
 
         [Test]
+        public void CombinationOfCommandsWithUnidentifiedCommand_MoveAccordinglyUntillException()
+        {
+            //Use a stringbuilder to verify MoveForward()/MoveBackward was called in the correct order.
+            StringBuilder sb = new StringBuilder();
+
+            roverMock.Setup(r => r.MoveForward()).Callback(() => sb.Append("F"));
+            roverMock.Setup(r => r.MoveBackward()).Callback(() => sb.Append("B"));
+            roverMock.Setup(r => r.TurnRight()).Callback(() => sb.Append("R"));
+            roverMock.Setup(r => r.TurnLeft()).Callback(() => sb.Append("L"));
+
+            string testString = "BFBFRRRBFBBBFFFXLFFRFFFF";
+
+
+            Assert.Throws<InvalidEnumArgumentException>(() => commandHandler.HandleString(testString),
+                string.Format("The received command : '%0' is not supported", "X"));
+
+
+            string expected = testString.Substring(0, testString.IndexOf("X"));
+
+            Assert.AreEqual(expected, sb.ToString());
+        }
+
+
+        [Test]
         public void UndefinedCharacter_ThrowsException()
         {
-            Assert.Throws<InvalidEnumArgumentException>(() => commandHandler.HandleString("X"));
+            Assert.Throws<InvalidEnumArgumentException>(() => commandHandler.HandleString("X"),
+                string.Format("The received command : '%0' is not supported", "X"));
         }
     }
 }
