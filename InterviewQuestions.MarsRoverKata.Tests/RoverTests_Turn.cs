@@ -12,6 +12,8 @@ namespace InterviewQuestions.MarsRoverKata.Tests
 
             rover.TurnRight();
 
+            Assert.AreEqual(5, rover.Position.X);
+            Assert.AreEqual(5, rover.Position.Y);
             Assert.AreEqual(Direction.East, rover.Direction);
         }
 
@@ -22,6 +24,8 @@ namespace InterviewQuestions.MarsRoverKata.Tests
 
             rover.TurnRight();
 
+            Assert.AreEqual(5, rover.Position.X);
+            Assert.AreEqual(5, rover.Position.Y);
             Assert.AreEqual(Direction.South, rover.Direction);
         }
 
@@ -32,6 +36,8 @@ namespace InterviewQuestions.MarsRoverKata.Tests
 
             rover.TurnRight();
 
+            Assert.AreEqual(5, rover.Position.X);
+            Assert.AreEqual(5, rover.Position.Y);
             Assert.AreEqual(Direction.West, rover.Direction);
         }
 
@@ -42,6 +48,8 @@ namespace InterviewQuestions.MarsRoverKata.Tests
 
             rover.TurnRight();
 
+            Assert.AreEqual(5, rover.Position.X);
+            Assert.AreEqual(5, rover.Position.Y);
             Assert.AreEqual(Direction.North, rover.Direction);
         }
 
@@ -52,6 +60,8 @@ namespace InterviewQuestions.MarsRoverKata.Tests
             
             rover.TurnLeft();
 
+            Assert.AreEqual(5, rover.Position.X);
+            Assert.AreEqual(5, rover.Position.Y);
             Assert.AreEqual(Direction.West, rover.Direction);
         }
 
@@ -62,6 +72,8 @@ namespace InterviewQuestions.MarsRoverKata.Tests
 
             rover.TurnLeft();
 
+            Assert.AreEqual(5, rover.Position.X);
+            Assert.AreEqual(5, rover.Position.Y);
             Assert.AreEqual(Direction.North, rover.Direction);
         }
         [Test]
@@ -71,6 +83,8 @@ namespace InterviewQuestions.MarsRoverKata.Tests
 
             rover.TurnLeft();
 
+            Assert.AreEqual(5, rover.Position.X);
+            Assert.AreEqual(5, rover.Position.Y);
             Assert.AreEqual(Direction.East, rover.Direction);
         }
         [Test]
@@ -80,6 +94,8 @@ namespace InterviewQuestions.MarsRoverKata.Tests
 
             rover.TurnLeft();
 
+            Assert.AreEqual(5, rover.Position.X);
+            Assert.AreEqual(5, rover.Position.Y);
             Assert.AreEqual(Direction.South, rover.Direction);
         }
     }
