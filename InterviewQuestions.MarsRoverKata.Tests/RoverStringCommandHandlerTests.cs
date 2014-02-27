@@ -42,6 +42,23 @@ namespace InterviewQuestions.MarsRoverKata.Tests
         }
 
         [Test]
+        public void R_TurnedRight()
+        {
+            commandHandler.HandleString("R");
+
+            roverMock.Verify(r => r.TurnRight());
+        }
+
+
+        [Test]
+        public void L_TurnedRight()
+        {
+            commandHandler.HandleString("L");
+
+            roverMock.Verify(r => r.TurnLeft());
+        }
+
+        [Test]
         public void CombinationOfCommands_MoveAccordingly()
         {
             //Use a stringbuilder to verify MoveForward()/MoveBackward was called in the correct order.
@@ -49,8 +66,10 @@ namespace InterviewQuestions.MarsRoverKata.Tests
 
             roverMock.Setup(r => r.MoveForward()).Callback(() => sb.Append("F"));
             roverMock.Setup(r => r.MoveBackward()).Callback(() => sb.Append("B"));
+            roverMock.Setup(r => r.TurnRight()).Callback(() => sb.Append("R"));
+            roverMock.Setup(r => r.TurnLeft()).Callback(() => sb.Append("L"));
 
-            string testString = "BFBFBFBBBFFFFFFFFF";
+            string testString = "BFBFRRRBFBBBFFFLFFRFFFF";
             commandHandler.HandleString(testString);
 
             Assert.AreEqual(testString, sb.ToString());

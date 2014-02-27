@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace InterviewQuestions.MarsRoverKata.Tests
 {
     [TestFixture]
-    class RoverTests
+    class RoverTests_Move
     {
         
         [Test]

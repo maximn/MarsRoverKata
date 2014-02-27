@@ -34,6 +34,12 @@ namespace InterviewQuestions.MarsRoverKata
                 case 'B':
                     rover.MoveBackward();
                     break;
+                case 'R':
+                    rover.TurnRight();
+                    break;
+                case 'L':
+                    rover.TurnLeft();
+                    break;
                 default:
                     throw new InvalidEnumArgumentException(string.Format("The received command : '%0' is not supported", ch));
 
