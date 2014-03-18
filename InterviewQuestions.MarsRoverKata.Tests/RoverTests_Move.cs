@@ -22,128 +22,42 @@ namespace InterviewQuestions.MarsRoverKata.Tests
         }
 
 
-        /// <summary>
-        /// The scenario for most test cases -
-        /// * move is in boundaries 
-        /// * way is clear
-        /// </summary>
-        private void SetDefaultPlanet()
-        {
-            planetMock.Setup(p => p.CalculateOutOfBoundaryPosition(It.IsAny<Position>()))
-                      .Returns<Position>(position => position);
-
-            planetMock.Setup(p => p.IsClear(It.IsAny<Position>())).Returns(true);
-        }
-
-        [Test]
-        public void RoverLandedNorth_MoveForward_OneStepAhead()
+        [TestCase(Direction.North, 5, 6)]
+        [TestCase(Direction.East, 6, 5)]
+        [TestCase(Direction.South, 5, 4)]
+        [TestCase(Direction.West, 4, 5)]
+        public void MoveForward_OneStepAhead(Direction initialDirection, int destinationX, int destinationY)
         {
             SetDefaultPlanet();
-            Rover rover = new Rover(new Position(5,5), Direction.North, planet);
-
-            rover.MoveForward();
-           
-            Assert.AreEqual(Direction.North, rover.Direction);
-            Assert.AreEqual(5, rover.Position.X);
-            Assert.AreEqual(6, rover.Position.Y);
-        }
-
-        [Test]
-        public void RoverLandedEast_MoveForward_OneStepAhead()
-        {
-            SetDefaultPlanet();
-            Rover rover = new Rover(new Position(5, 5), Direction.East, planet);
+            Rover rover = new Rover(new Position(5, 5), initialDirection, planet);
 
             rover.MoveForward();
 
-            Assert.AreEqual(Direction.East, rover.Direction);
-            Assert.AreEqual(6, rover.Position.X);
-            Assert.AreEqual(5, rover.Position.Y);
+            Assert.AreEqual(initialDirection, rover.Direction);
+            Assert.AreEqual(destinationX, rover.Position.X);
+            Assert.AreEqual(destinationY, rover.Position.Y);
         }
 
-        [Test]
-        public void RoverLandedSouth_MoveForward_OneStepAhead()
+        [TestCase(Direction.North, 5, 4)]
+        [TestCase(Direction.East, 4, 5)]
+        [TestCase(Direction.South, 5, 6)]
+        [TestCase(Direction.West, 6, 5)]
+        public void MoveBackward_OneStepBehind(Direction initialDirection, int destinationX, int destinationY)
         {
             SetDefaultPlanet();
-            Rover rover = new Rover(new Position(5, 5), Direction.South, planet);
-
-            rover.MoveForward();
-
-            Assert.AreEqual(Direction.South, rover.Direction);
-            Assert.AreEqual(5, rover.Position.X);
-            Assert.AreEqual(4, rover.Position.Y);
-        }
-
-        [Test]
-        public void RoverLandedWest_MoveForward_OneStepAhead()
-        {
-            SetDefaultPlanet();
-            Rover rover = new Rover(new Position(5, 5), Direction.West, planet);
-
-            rover.MoveForward();
-
-            Assert.AreEqual(Direction.West, rover.Direction);
-            Assert.AreEqual(4, rover.Position.X);
-            Assert.AreEqual(5, rover.Position.Y);
-        }
-
-
-        [Test]
-        public void RoverLandedNorth_MoveForward_OneStepBehind()
-        {
-            SetDefaultPlanet();
-            Rover rover = new Rover(new Position(5, 5), Direction.North, planet);
+            Rover rover = new Rover(new Position(5, 5), initialDirection, planet);
 
             rover.MoveBackward();
 
-            Assert.AreEqual(Direction.North, rover.Direction);
-            Assert.AreEqual(5, rover.Position.X);
-            Assert.AreEqual(4, rover.Position.Y);
-        }
-
-        [Test]
-        public void RoverLandedEast_MoveForward_OneStepBehind()
-        {
-            SetDefaultPlanet();
-            Rover rover = new Rover(new Position(5, 5), Direction.East, planet);
-
-            rover.MoveBackward();
-
-            Assert.AreEqual(Direction.East, rover.Direction);
-            Assert.AreEqual(4, rover.Position.X);
-            Assert.AreEqual(5, rover.Position.Y);
-        }
-
-        [Test]
-        public void RoverLandedSouth_MoveForward_OneStepBehind()
-        {
-            SetDefaultPlanet();
-            Rover rover = new Rover(new Position(5, 5), Direction.South, planet);
-
-            rover.MoveBackward();
-
-            Assert.AreEqual(Direction.South, rover.Direction);
-            Assert.AreEqual(5, rover.Position.X);
-            Assert.AreEqual(6, rover.Position.Y);
-        }
-
-        [Test]
-        public void RoverLandedWest_MoveForward_OneStepBehind()
-        {
-            SetDefaultPlanet();
-            Rover rover = new Rover(new Position(5, 5), Direction.West, planet);
-
-            rover.MoveBackward();
-
-            Assert.AreEqual(Direction.West, rover.Direction);
-            Assert.AreEqual(6, rover.Position.X);
-            Assert.AreEqual(5, rover.Position.Y);
+            Assert.AreEqual(initialDirection, rover.Direction);
+            Assert.AreEqual(destinationX, rover.Position.X);
+            Assert.AreEqual(destinationY, rover.Position.Y);
         }
 
         [Test]
         public void RoverMoveForward_GetMovedInThePlanet()
         {
-            Position destination = new Position(2,3);
+            Position destination = new Position(2, 3);
             planetMock.Setup(p => p.CalculateOutOfBoundaryPosition(It.IsAny<Position>()))
                       .Returns<Position>(position => destination);
             planetMock.Setup(p => p.IsClear(It.IsAny<Position>())).Returns(true);
@@ -175,32 +89,51 @@ namespace InterviewQuestions.MarsRoverKata.Tests
         }
 
         [Test]
-        public void RoverMoveForward_HitObstacle_ThrowsException()
+        public void RoverMoveForward_HitObstacle_ThrowsException([Range(0, 3)] Direction direction)
         {
-            Position destination = new Position(6,7);
-           planetMock.Setup(p => p.CalculateOutOfBoundaryPosition(It.IsAny<Position>()))
-                            .Returns<Position>(position => destination);
-            planetMock.Setup(p => p.IsClear(It.IsAny<Position>())).Returns(false);
+            var destination = SetUpPlanet_WayNotClear();
 
-            Rover rover = new Rover(new Position(5, 5), Direction.West, planet);
+            Rover rover = new Rover(new Position(5, 5), direction, planet);
 
             Assert.Throws<ObstacleOnWayException>(rover.MoveForward,
                 string.Format("Can't move to (%0, %1) due to an obstacle on the planet", destination.X, destination.Y));
         }
 
-
         [Test]
-        public void RoverMoveBackward_HitObstacle_ThrowsException()
+        public void RoverMoveBackward_HitObstacle_ThrowsException([Range(0, 3)]Direction direction)
         {
-            Position destination = new Position(6, 7);
-            planetMock.Setup(p => p.CalculateOutOfBoundaryPosition(It.IsAny<Position>()))
-                             .Returns<Position>(position => destination);
-            planetMock.Setup(p => p.IsClear(It.IsAny<Position>())).Returns(false);
+            Position destination = SetUpPlanet_WayNotClear();
 
-            Rover rover = new Rover(new Position(5, 5), Direction.West, planet);
+            Rover rover = new Rover(new Position(5, 5), direction, planet);
 
             Assert.Throws<ObstacleOnWayException>(rover.MoveBackward,
                 string.Format("Can't move to (%0, %1) due to an obstacle on the planet", destination.X, destination.Y));
+        }
+
+
+
+
+        /// <summary>
+        /// The scenario for most test cases -
+        /// * move is in boundaries 
+        /// * way is clear
+        /// </summary>
+        private void SetDefaultPlanet()
+        {
+            planetMock.Setup(p => p.CalculateOutOfBoundaryPosition(It.IsAny<Position>()))
+                      .Returns<Position>(position => position);
+
+            planetMock.Setup(p => p.IsClear(It.IsAny<Position>())).Returns(true);
+        }
+
+
+        private Position SetUpPlanet_WayNotClear()
+        {
+            Position destination = new Position(6, 7);
+            planetMock.Setup(p => p.CalculateOutOfBoundaryPosition(It.IsAny<Position>()))
+                .Returns<Position>(position => destination);
+            planetMock.Setup(p => p.IsClear(It.IsAny<Position>())).Returns(false);
+            return destination;
         }
     }
 }
